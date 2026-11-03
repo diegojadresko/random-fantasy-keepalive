@@ -1,0 +1,16 @@
+name: Keep Supabase Alive
+on:
+  schedule:
+    - cron: '0 8 * * *' # Svaki dan u 8:00 UTC
+  workflow_dispatch: # Omogućuje ručno pokretanje
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/wake_up_supabase" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"value": "keep-alive"}'
